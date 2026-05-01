@@ -28,6 +28,6 @@ class CreatePlayerGameStats < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :player_game_stats, [:player_id, :game_id], unique: true
+    add_index :player_game_stats, [ :player_id, :game_id ], unique: true
   end
 end

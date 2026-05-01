@@ -8,6 +8,6 @@ class CreatePlayerSeasons < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :player_seasons, [:player_id, :season_id], unique: true
+    add_index :player_seasons, [ :player_id, :season_id ], unique: true
   end
 end

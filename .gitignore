@@ -36,3 +36,6 @@
 # Kamal deployment (not used — deploying via Heroku)
 /.kamal
 
+# VS Code
+/.vscode
+

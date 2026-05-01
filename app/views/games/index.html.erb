@@ -1,5 +1,8 @@
 <div class="page-header">
   <h1>Games — <%= @season_year - 1 %>–<%= @season_year %></h1>
+  <div class="season-record">
+    <%= @wins %>–<%= @losses %> (<%= @conf_wins %>–<%= @conf_losses %>)
+  </div>
 
   <%= form_with url: games_path, method: :get, data: { turbo: false } do |f| %>
     <div class="filters">
@@ -11,22 +14,23 @@
 
 <% @games.each do |game| %>
   <div class="game-card">
-    <div class="game-card-header">
+    <div class="game-card-header <%= game.result == 'W' ? 'game-card-header-w' : (game.result == 'L' ? 'game-card-header-l' : '') %>"
+         onclick="this.nextElementSibling.classList.toggle('open')">
       <span class="game-title">
         <%= game.date.strftime("%b %-d") %>
         <%= game.home_away == "home" ? "vs" : "@" %>
-        <%= game.opponent %>
+        <%= game.opponent %><% if game.season_type == "postseason" %> (March Madness)<% elsif game.conference_game? %> (Big Ten)<% end %>
       </span>
       <span>
         <% if game.result.present? %>
-          <span class="<%= game.result == 'W' ? 'result-w' : 'result-l' %>" style="color:white;">
+          <span style="color:white;font-weight:600;">
             <%= game.result %> <%= game.nu_score %>–<%= game.opp_score %>
           </span>
         <% end %>
       </span>
     </div>
 
-    <div class="game-card-body open">
+    <div class="game-card-body">
       <table class="stats-table">
         <thead>
           <tr>

@@ -183,6 +183,17 @@ nav a.active {
   cursor: pointer;
 }
 
+.game-card-header-w { background: #2e7d32; }
+.game-card-header-l { background: #c62828; }
+
+.season-record {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4e2a84;
+  margin-bottom: 12px;
+}
+.season-record-sep { color: #aaa; }
+
 .game-card-header .game-title {
   font-weight: 600;
   font-size: 1rem;

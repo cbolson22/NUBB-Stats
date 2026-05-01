@@ -1,0 +1,99 @@
+boo_game_2024_one:
+  player: boo
+  game: game_2024_one
+  starter: true
+  minutes: 35
+  points: 20
+  reb_total: 3
+  reb_offensive: 1
+  reb_defensive: 2
+  assists: 5
+  steals: 2
+  blocks: 0
+  turnovers: 2
+  fgm: 7
+  fga: 15
+  fg3m: 3
+  fg3a: 7
+  ftm: 3
+  fta: 4
+
+boo_game_2024_two:
+  player: boo
+  game: game_2024_two
+  starter: true
+  minutes: 30
+  points: 10
+  reb_total: 2
+  reb_offensive: 0
+  reb_defensive: 2
+  assists: 4
+  steals: 1
+  blocks: 0
+  turnovers: 3
+  fgm: 4
+  fga: 12
+  fg3m: 1
+  fg3a: 5
+  ftm: 1
+  fta: 2
+
+boo_game_2025_one:
+  player: boo
+  game: game_2025_one
+  starter: true
+  minutes: 32
+  points: 18
+  reb_total: 4
+  reb_offensive: 1
+  reb_defensive: 3
+  assists: 6
+  steals: 1
+  blocks: 1
+  turnovers: 2
+  fgm: 6
+  fga: 14
+  fg3m: 2
+  fg3a: 6
+  ftm: 4
+  fta: 5
+
+chase_game_2024_one:
+  player: chase
+  game: game_2024_one
+  starter: true
+  minutes: 28
+  points: 12
+  reb_total: 4
+  reb_offensive: 1
+  reb_defensive: 3
+  assists: 2
+  steals: 1
+  blocks: 0
+  turnovers: 1
+  fgm: 4
+  fga: 10
+  fg3m: 2
+  fg3a: 5
+  ftm: 2
+  fta: 3
+
+chase_game_2024_two:
+  player: chase
+  game: game_2024_two
+  starter: false
+  minutes: 20
+  points: 8
+  reb_total: 3
+  reb_offensive: 0
+  reb_defensive: 3
+  assists: 1
+  steals: 0
+  blocks: 1
+  turnovers: 2
+  fgm: 3
+  fga: 8
+  fg3m: 1
+  fg3a: 4
+  ftm: 1
+  fta: 2

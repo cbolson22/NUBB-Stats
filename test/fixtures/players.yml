@@ -1,0 +1,11 @@
+boo:
+  name: "Boo Buie"
+  api_athlete_id: "TEST_BOO"
+
+chase:
+  name: "Chase Audige"
+  api_athlete_id: "TEST_CHASE"
+
+parker:
+  name: "Parker Strauss"
+  api_athlete_id: "TEST_PARKER"

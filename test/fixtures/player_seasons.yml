@@ -1,0 +1,19 @@
+boo_2024:
+  player: boo
+  season: season_2024
+  class_year: senior
+
+boo_2025:
+  player: boo
+  season: season_2025
+  class_year: graduate
+
+chase_2024:
+  player: chase
+  season: season_2024
+  class_year: junior
+
+parker_2024:
+  player: parker
+  season: season_2024
+  class_year: freshman

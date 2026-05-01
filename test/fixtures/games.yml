@@ -1,0 +1,35 @@
+game_2024_one:
+  api_game_id: 1001
+  season: season_2024
+  date: "2023-12-01 19:00:00"
+  opponent: "Michigan"
+  home_away: home
+  result: W
+  nu_score: 75
+  opp_score: 65
+  season_type: regular
+  conference_game: false
+
+game_2024_two:
+  api_game_id: 1002
+  season: season_2024
+  date: "2024-01-15 19:00:00"
+  opponent: "Illinois"
+  home_away: away
+  result: L
+  nu_score: 60
+  opp_score: 70
+  season_type: regular
+  conference_game: true
+
+game_2025_one:
+  api_game_id: 1003
+  season: season_2025
+  date: "2024-12-01 19:00:00"
+  opponent: "Indiana"
+  home_away: home
+  result: W
+  nu_score: 80
+  opp_score: 70
+  season_type: regular
+  conference_game: false

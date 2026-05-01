@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h1>Games — <%= @season_year - 1 %>–<%= @season_year %></h1>
+
+  <%= form_with url: games_path, method: :get, data: { turbo: false } do |f| %>
+    <div class="filters">
+      <%= f.select :season, @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year } %>
+      <%= f.submit "Filter" %>
+    </div>
+  <% end %>
+</div>
+
+<% @games.each do |game| %>
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="game-title">
+        <%= game.date.strftime("%b %-d") %>
+        <%= game.home_away == "home" ? "vs" : "@" %>
+        <%= game.opponent %>
+      </span>
+      <span>
+        <% if game.result.present? %>
+          <span class="<%= game.result == 'W' ? 'result-w' : 'result-l' %>" style="color:white;">
+            <%= game.result %> <%= game.nu_score %>–<%= game.opp_score %>
+          </span>
+        <% end %>
+      </span>
+    </div>
+
+    <div class="game-card-body open">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Start</th>
+            <th>MIN</th>
+            <th>PTS</th>
+            <th>REB</th>
+            <th>AST</th>
+            <th>STL</th>
+            <th>BLK</th>
+            <th>TO</th>
+            <th>FG</th>
+            <th>3P</th>
+            <th>FT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% game.player_game_stats.sort_by { |s| [-s.minutes.to_i, s.player.name] }.each do |s| %>
+            <tr>
+              <td><%= link_to s.player.name, player_path(s.player, season: @season_year), class: "player-link" %></td>
+              <td><%= s.starter? ? "✓" : "" %></td>
+              <td><%= s.minutes.to_i %></td>
+              <td><%= s.points.to_i %></td>
+              <td><%= s.reb_total.to_i %></td>
+              <td><%= s.assists.to_i %></td>
+              <td><%= s.steals.to_i %></td>
+              <td><%= s.blocks.to_i %></td>
+              <td><%= s.turnovers.to_i %></td>
+              <td><%= s.fgm.to_i %>–<%= s.fga.to_i %></td>
+              <td><%= s.fg3m.to_i %>–<%= s.fg3a.to_i %></td>
+              <td><%= s.ftm.to_i %>–<%= s.fta.to_i %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

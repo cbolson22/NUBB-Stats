@@ -1,0 +1,106 @@
+<% per_game = params[:mode] == "per_game" %>
+
+<div class="page-header">
+  <h1>Player Stats<% if @season_year %> — <%= @season_year - 1 %>–<%= @season_year %><% else %> — All Seasons<% end %></h1>
+
+  <%= form_with url: players_path, method: :get, data: { turbo: false } do |f| %>
+    <div class="filters">
+      <%= f.select :season, [["All seasons", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" } %>
+      <%= f.select :class_year, [["All years", ""]] + @class_years.map { |cy| [cy.capitalize, cy] }, { selected: params[:class_year] } %>
+      <%= f.hidden_field :mode, value: params[:mode] %>
+      <%= f.submit "Filter" %>
+    </div>
+  <% end %>
+
+  <div class="toggle-group">
+    <%= link_to "Totals", players_path(request.query_parameters.merge(mode: "totals")), class: "toggle-btn #{per_game ? '' : 'active'}", data: { turbo: false } %>
+    <%= link_to "Per Game", players_path(request.query_parameters.merge(mode: "per_game")), class: "toggle-btn #{per_game ? 'active' : ''}", data: { turbo: false } %>
+  </div>
+</div>
+
+<table class="stats-table">
+  <% base = request.query_parameters %>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th><%= @season_year.present? || params[:class_year].present? ? "Year" : "" %></th>
+      <th><%= sort_link("G", "games_played", @sort_col, @sort_dir, base) %></th>
+      <% if per_game %>
+        <th><%= sort_link("PPG", "ppg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("RPG", "rpg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("APG", "apg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("SPG", "spg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("BPG", "bpg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("TOPG", "topg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FGM", "fgm_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FGA", "fga_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FG%", "fg_pct", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3PM", "fg3m_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3PA", "fg3a_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3P%", "fg3_pct", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FTM", "ftm_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FTA", "fta_pg", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FT%", "ft_pct", @sort_col, @sort_dir, base) %></th>
+      <% else %>
+        <th><%= sort_link("PTS", "total_pts", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("REB", "total_reb", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("AST", "total_ast", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("STL", "total_stl", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("BLK", "total_blk", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("TO", "total_to", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FGM", "total_fgm", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FGA", "total_fga", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FG%", "fg_pct", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3PM", "total_fg3m", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3PA", "total_fg3a", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("3P%", "fg3_pct", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FTM", "total_ftm", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FTA", "total_fta", @sort_col, @sort_dir, base) %></th>
+        <th><%= sort_link("FT%", "ft_pct", @sort_col, @sort_dir, base) %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stats.each do |s| %>
+      <% stat = s[:stats]; player = s[:player] %>
+      <tr>
+        <td><%= link_to player.name, player_path(player, season: @season_year), class: "player-link" %></td>
+        <td><%= (params[:class_year].presence || s[:class_year])&.capitalize %></td>
+        <td><%= stat.games_played.to_i %></td>
+        <% if per_game %>
+          <td><%= stat.ppg %></td>
+          <td><%= stat.rpg %></td>
+          <td><%= stat.apg %></td>
+          <td><%= stat.spg %></td>
+          <td><%= stat.bpg %></td>
+          <td><%= stat.topg %></td>
+          <td><%= stat.fgm_pg %></td>
+          <td><%= stat.fga_pg %></td>
+          <td><%= stat.fg_pct %>%</td>
+          <td><%= stat.fg3m_pg %></td>
+          <td><%= stat.fg3a_pg %></td>
+          <td><%= stat.fg3_pct %>%</td>
+          <td><%= stat.ftm_pg %></td>
+          <td><%= stat.fta_pg %></td>
+          <td><%= stat.ft_pct %>%</td>
+        <% else %>
+          <td><%= stat.total_pts.to_i %></td>
+          <td><%= stat.total_reb.to_i %></td>
+          <td><%= stat.total_ast.to_i %></td>
+          <td><%= stat.total_stl.to_i %></td>
+          <td><%= stat.total_blk.to_i %></td>
+          <td><%= stat.total_to.to_i %></td>
+          <td><%= stat.total_fgm.to_i %></td>
+          <td><%= stat.total_fga.to_i %></td>
+          <td><%= stat.fg_pct %>%</td>
+          <td><%= stat.total_fg3m.to_i %></td>
+          <td><%= stat.total_fg3a.to_i %></td>
+          <td><%= stat.fg3_pct %>%</td>
+          <td><%= stat.total_ftm.to_i %></td>
+          <td><%= stat.total_fta.to_i %></td>
+          <td><%= stat.ft_pct %>%</td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

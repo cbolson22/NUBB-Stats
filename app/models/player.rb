@@ -6,4 +6,8 @@ class Player < ApplicationRecord
 
   validates :name, presence: true
   validates :api_athlete_id, presence: true, uniqueness: true
+
+  def class_year_for(season_year)
+    player_seasons.joins(:season).find_by(seasons: { year: season_year })&.class_year
+  end
 end

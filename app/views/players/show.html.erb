@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1><%= @player.name %></h1>
+
+  <%= form_with url: player_path(@player), method: :get, data: { turbo: false } do |f| %>
+    <div class="filters">
+      <%= f.select :season, @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year } %>
+      <%= f.submit "Filter" %>
+      <%= link_to "← All players", players_path(season: @season_year) %>
+    </div>
+  <% end %>
+</div>
+
+<% if @game_stats.any? %>
+  <table class="stats-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Opponent</th>
+        <th>Result</th>
+        <th>Start</th>
+        <th>MIN</th>
+        <th>PTS</th>
+        <th>REB</th>
+        <th>AST</th>
+        <th>STL</th>
+        <th>BLK</th>
+        <th>TO</th>
+        <th>FG</th>
+        <th>3P</th>
+        <th>FT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @game_stats.each do |s| %>
+        <% g = s.game %>
+        <tr>
+          <td><%= g.date.strftime("%b %-d") %></td>
+          <td><%= g.home_away == "home" ? "vs" : "@" %> <%= g.opponent %></td>
+          <td class="<%= g.result == 'W' ? 'result-w' : 'result-l' %>"><%= g.result %> <%= g.nu_score %>–<%= g.opp_score %></td>
+          <td><%= s.starter? ? "✓" : "" %></td>
+          <td><%= s.minutes.to_i %></td>
+          <td><%= s.points.to_i %></td>
+          <td><%= s.reb_total.to_i %></td>
+          <td><%= s.assists.to_i %></td>
+          <td><%= s.steals.to_i %></td>
+          <td><%= s.blocks.to_i %></td>
+          <td><%= s.turnovers.to_i %></td>
+          <td><%= s.fgm.to_i %>–<%= s.fga.to_i %></td>
+          <td><%= s.fg3m.to_i %>–<%= s.fg3a.to_i %></td>
+          <td><%= s.ftm.to_i %>–<%= s.fta.to_i %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p style="color:#888;margin-top:16px;">No game stats found for this season.</p>
+<% end %>

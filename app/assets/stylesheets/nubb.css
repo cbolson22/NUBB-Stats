@@ -266,3 +266,10 @@ nav a.active {
 
 .stats-table tbody tr:hover { background: #f0eaf8; }
 .stats-table tbody tr:last-child td { border-bottom: none; }
+
+.season-divider td {
+  padding: 0;
+  height: 3px;
+  background: #e0d0f0;
+  border: none;
+}

@@ -1,4 +1,6 @@
 class PlayersController < ApplicationController
+  GAME_SORTABLE_COLS = %w[date minutes points reb_total assists steals blocks turnovers fgm fg3m ftm].freeze
+
   SORTABLE_COLS = %w[
     games_played total_pts total_reb total_ast total_stl total_blk total_to
     total_fgm total_fga fg_pct total_fg3m total_fg3a fg3_pct total_ftm total_fta ft_pct
@@ -34,12 +36,22 @@ class PlayersController < ApplicationController
   def show
     @player      = Player.find(params[:id])
     @seasons     = @player.seasons.order(year: :desc).pluck(:year)
-    season_year  = params[:season] ? params[:season].to_i : @seasons.first
+    season_year  = if params[:season] == "all"
+                     nil
+    elsif params[:season]
+                     params[:season].to_i
+    else
+                     @seasons.first
+    end
     @season_year = season_year
+    @sort_col    = GAME_SORTABLE_COLS.include?(params[:sort]) ? params[:sort] : "date"
+    default_dir  = @sort_col == "date" ? "asc" : "desc"
+    @sort_dir    = %w[asc desc].include?(params[:dir]) ? params[:dir] : default_dir
+    order_sql    = @sort_col == "date" ? "games.date #{@sort_dir}" : "player_game_stats.#{@sort_col} #{@sort_dir} NULLS LAST"
+
     @game_stats  = @player.player_game_stats
                           .for_season(season_year)
-                          .joins(:game)
-                          .order("games.date ASC")
+                          .order(Arel.sql(order_sql))
                           .includes(:game)
   end
 end

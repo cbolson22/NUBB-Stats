@@ -64,7 +64,7 @@
     <% @stats.each do |s| %>
       <% stat = s[:stats]; player = s[:player] %>
       <tr>
-        <td><%= link_to player.name, player_path(player, season: @season_year), class: "player-link" %></td>
+        <td><%= link_to player.name, player_path(player, season: @season_year || "all"), class: "player-link" %></td>
         <td><%= (params[:class_year].presence || s[:class_year])&.capitalize %></td>
         <td><%= stat.games_played.to_i %></td>
         <% if per_game %>

@@ -3,7 +3,7 @@
 
   <%= form_with url: player_path(@player), method: :get, data: { turbo: false } do |f| %>
     <div class="filters">
-      <%= f.select :season, @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year } %>
+      <%= f.select :season, [["All Years", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" } %>
       <%= f.submit "Filter" %>
       <%= link_to "← All players", players_path(season: @season_year) %>
     </div>
@@ -12,29 +12,36 @@
 
 <% if @game_stats.any? %>
   <table class="stats-table">
+    <% base = request.query_parameters %>
+    <% url_proc = ->(p) { player_path(@player, p) } %>
     <thead>
       <tr>
-        <th>Date</th>
+        <th><%= sort_link("Date", "date", @sort_col, @sort_dir, base, url_proc) %></th>
         <th>Opponent</th>
         <th>Result</th>
         <th>Start</th>
-        <th>MIN</th>
-        <th>PTS</th>
-        <th>REB</th>
-        <th>AST</th>
-        <th>STL</th>
-        <th>BLK</th>
-        <th>TO</th>
-        <th>FG</th>
-        <th>3P</th>
-        <th>FT</th>
+        <th><%= sort_link("MIN", "minutes", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("PTS", "points", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("REB", "reb_total", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("AST", "assists", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("STL", "steals", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("BLK", "blocks", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("TO", "turnovers", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("FG", "fgm", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("3P", "fg3m", @sort_col, @sort_dir, base, url_proc) %></th>
+        <th><%= sort_link("FT", "ftm", @sort_col, @sort_dir, base, url_proc) %></th>
       </tr>
     </thead>
     <tbody>
+      <% current_season_id = nil %>
       <% @game_stats.each do |s| %>
         <% g = s.game %>
+        <% if @season_year.nil? && @sort_col == "date" && current_season_id && g.season_id != current_season_id %>
+          <tr class="season-divider"><td colspan="14"></td></tr>
+        <% end %>
+        <% current_season_id = g.season_id %>
         <tr>
-          <td><%= g.date.strftime("%b %-d") %></td>
+          <td><%= g.date.strftime(@season_year.nil? ? "%b %-d, %Y" : "%b %-d") %></td>
           <td><%= g.home_away == "home" ? "vs" : "@" %> <%= g.opponent %></td>
           <td class="<%= g.result == 'W' ? 'result-w' : 'result-l' %>"><%= g.result %> <%= g.nu_score %>–<%= g.opp_score %></td>
           <td><%= s.starter? ? "✓" : "" %></td>

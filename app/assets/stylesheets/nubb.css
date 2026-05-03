@@ -57,7 +57,9 @@ nav a.active {
   outline: none;
 }
 
-.nav-search-input::placeholder { color: rgba(255, 255, 255, 0.6); }
+.nav-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
 .nav-search-input:focus {
   background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.6);
@@ -75,7 +77,9 @@ nav a.active {
   z-index: 100;
 }
 
-.player-search-results:empty { display: none; }
+.player-search-results:empty {
+  display: none;
+}
 
 .player-search-result {
   padding: 8px 12px;
@@ -114,7 +118,9 @@ nav a.active {
   margin-bottom: 6px;
 }
 
-.back-link:hover { color: #4e2a84; }
+.back-link:hover {
+  color: #4e2a84;
+}
 
 .filters {
   display: flex;
@@ -170,8 +176,13 @@ nav a.active {
   border: 1px solid #ccc;
 }
 
-.toggle-btn:first-child { border-radius: 4px 0 0 4px; border-right: none; }
-.toggle-btn:last-child { border-radius: 0 4px 4px 0; }
+.toggle-btn:first-child {
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+.toggle-btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
 
 .toggle-btn.active {
   background: #4e2a84;
@@ -241,8 +252,12 @@ nav a.active {
   cursor: pointer;
 }
 
-.game-card-header-w { background: #2e7d32; }
-.game-card-header-l { background: #c62828; }
+.game-card-header-w {
+  background: #2d6e3e;
+}
+.game-card-header-l {
+  background: #b33a3a;
+}
 
 .season-record {
   font-size: 1.1rem;
@@ -250,7 +265,9 @@ nav a.active {
   color: #4e2a84;
   margin-bottom: 12px;
 }
-.season-record-sep { color: #aaa; }
+.season-record-sep {
+  color: #aaa;
+}
 
 .game-card-header .game-title {
   font-weight: 600;
@@ -299,7 +316,7 @@ nav a.active {
   background: white;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
 }
 
@@ -312,7 +329,9 @@ nav a.active {
   white-space: nowrap;
 }
 
-.stats-table th:first-child { text-align: left; }
+.stats-table th:first-child {
+  text-align: left;
+}
 
 .stats-table td {
   padding: 8px 12px;
@@ -320,10 +339,16 @@ nav a.active {
   border-bottom: 1px solid #eee;
 }
 
-.stats-table td:first-child { text-align: left; }
+.stats-table td:first-child {
+  text-align: left;
+}
 
-.stats-table tbody tr:hover { background: #f0eaf8; }
-.stats-table tbody tr:last-child td { border-bottom: none; }
+.stats-table tbody tr:hover {
+  background: #f0eaf8;
+}
+.stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
 
 .season-divider td {
   padding: 0;

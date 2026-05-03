@@ -13,7 +13,7 @@
 </div>
 
 <% @games.each do |game| %>
-  <div class="game-card">
+  <div class="game-card" id="game-<%= game.id %>">
     <div class="game-card-header <%= game.result == 'W' ? 'game-card-header-w' : (game.result == 'L' ? 'game-card-header-l' : '') %>"
          onclick="this.nextElementSibling.classList.toggle('open')">
       <span class="game-title">
@@ -70,3 +70,14 @@
     </div>
   </div>
 <% end %>
+
+<script>
+  (function() {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const card = document.querySelector(hash);
+    if (!card) return;
+    card.querySelector('.game-card-body').classList.add('open');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  })();
+</script>

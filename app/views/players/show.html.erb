@@ -41,7 +41,7 @@
         <% current_season_id = g.season_id %>
         <tr>
           <td><%= g.date.strftime(@season_year.nil? ? "%b %-d, %Y" : "%b %-d") %></td>
-          <td><%= g.home_away == "home" ? "vs" : "@" %> <%= g.opponent %></td>
+          <td><%= link_to "#{g.home_away == 'home' ? 'vs' : '@'} #{g.opponent}", games_path(season: g.season.year, anchor: "game-#{g.id}"), class: "player-link" %></td>
           <td class="<%= g.result == 'W' ? 'result-w' : 'result-l' %>"><%= g.result %> <%= g.nu_score %>–<%= g.opp_score %></td>
           <td><%= s.starter? ? "✓" : "" %></td>
           <td><%= s.minutes.to_i %></td>

@@ -52,6 +52,6 @@ class PlayersController < ApplicationController
     @game_stats  = @player.player_game_stats
                           .for_season(season_year)
                           .order(Arel.sql(order_sql))
-                          .includes(:game)
+                          .includes(game: :season)
   end
 end

@@ -14,7 +14,43 @@
       <a href="<%= root_path %>" class="brand">NUBB Stats</a>
       <a href="<%= players_path %>" class="<%= 'active' if controller_name == 'players' %>">Players</a>
       <a href="<%= games_path %>" class="<%= 'active' if controller_name == 'games' %>">Games</a>
+      <div class="nav-search">
+        <input type="text" id="player-search" placeholder="Search players…" class="nav-search-input" autocomplete="off">
+        <div id="player-search-results" class="player-search-results"></div>
+      </div>
     </nav>
+
+    <script>
+      (function() {
+        const PLAYERS = <%= Player.order(:name).map { |p| { name: p.name, url: player_path(p) } }.to_json.html_safe %>;
+        const input   = document.getElementById('player-search');
+        const results = document.getElementById('player-search-results');
+
+        input.addEventListener('input', function() {
+          const q = this.value.toLowerCase().trim();
+          results.innerHTML = '';
+          if (!q) return;
+          PLAYERS.filter(p => p.name.toLowerCase().includes(q)).forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'player-search-result';
+            div.textContent = p.name;
+            div.addEventListener('mousedown', () => window.location = p.url + '?season=all');
+            results.appendChild(div);
+          });
+        });
+
+        input.addEventListener('keydown', function(e) {
+          if (e.key !== 'Enter') return;
+          const q = this.value.toLowerCase().trim();
+          const match = PLAYERS.find(p => p.name.toLowerCase().includes(q));
+          if (match) window.location = match.url + '?season=all';
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.nav-search')) results.innerHTML = '';
+        });
+      })();
+    </script>
 
     <div class="container">
       <%= yield %>

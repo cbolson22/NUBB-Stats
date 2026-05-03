@@ -1,11 +1,10 @@
 <div class="page-header">
+  <%= link_to "← All players", players_path(season: @season_year), class: "back-link" %>
   <h1><%= @player.name %></h1>
 
   <%= form_with url: player_path(@player), method: :get, data: { turbo: false } do |f| %>
     <div class="filters">
-      <%= f.select :season, [["All Years", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" } %>
-      <%= f.submit "Filter" %>
-      <%= link_to "← All players", players_path(season: @season_year) %>
+      <%= f.select :season, [["All Years", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" }, { onchange: "this.form.submit()" } %>
     </div>
   <% end %>
 </div>

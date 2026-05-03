@@ -5,10 +5,9 @@
 
   <%= form_with url: players_path, method: :get, data: { turbo: false } do |f| %>
     <div class="filters">
-      <%= f.select :season, [["All seasons", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" } %>
-      <%= f.select :class_year, [["All years", ""]] + @class_years.map { |cy| [cy.capitalize, cy] }, { selected: params[:class_year] } %>
+      <%= f.select :season, [["All seasons", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" }, { onchange: "this.form.submit()" } %>
+      <%= f.select :class_year, [["All years", ""]] + @class_years.map { |cy| [cy.capitalize, cy] }, { selected: params[:class_year] }, { onchange: "this.form.submit()" } %>
       <%= f.hidden_field :mode, value: params[:mode] %>
-      <%= f.submit "Filter" %>
     </div>
   <% end %>
 

@@ -39,3 +39,6 @@
 # VS Code
 /.vscode
 
+# Claude context (contains implementation details, not for version control)
+/CLAUDE.md
+

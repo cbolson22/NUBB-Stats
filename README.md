@@ -1,24 +1,55 @@
-# README
+# NUBB Stats
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Northwestern University basketball stats site tracking all players since the 2022–23 season. Built for personal use by Connor and a few friends.
 
-Things you may want to cover:
+## Stack
 
-* Ruby version
+- **Ruby on Rails 8.1.3** — server-rendered HTML, no JS framework
+- **PostgreSQL** — hosted on Heroku Postgres (essential-0)
+- **Heroku** — app name `nubb-stats`, auto-deploy from GitHub main branch
+- **Heroku Scheduler** — runs `rake import:stats` nightly at 2am UTC
 
-* System dependencies
+## Data Source
 
-* Configuration
+[collegebasketballdata.com](https://collegebasketballdata.com/) — free tier, 1000 requests/month. API key stored in Heroku config vars (`CBBD_API_KEY`) and locally in `.env`.
 
-* Database creation
+Season numbering: `season=2023` means the 2022–23 season (ending year).
 
-* Database initialization
+## Local Development
 
-* How to run the test suite
+```bash
+bundle install
+rails db:create db:migrate db:seed
+rails server
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+The stats importer uses fixture files locally to avoid hitting the API rate limit. Fixture JSON files are in `test/fixtures/files/`.
 
-* Deployment instructions
+To run the importer locally against fixtures:
+```ruby
+StatsImporter.import(season: 2026, use_fixture: true)
+```
 
-* ...
+## Running Tests
+
+```bash
+rake ci
+```
+
+## Importing Stats
+
+```bash
+# Heroku
+heroku run rake import:stats --app nubb-stats
+
+# Local (uses fixture files)
+rake import:stats
+```
+
+## Deployment
+
+Push to `main` — Heroku auto-deploys. After schema changes:
+
+```bash
+heroku run rails db:migrate --app nubb-stats
+```

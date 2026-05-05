@@ -1,0 +1,74 @@
+<div class="home-hero">
+  <div class="home-hero-inner">
+    <p class="home-hero-eyebrow">Northwestern Wildcats Basketball</p>
+    <h1 class="home-hero-title">NUBB Stats</h1>
+    <p class="home-hero-season"><%= @season_year - 1 %>–<%= @season_year %> Season</p>
+    <div class="home-hero-records">
+      <div class="home-record-block">
+        <span class="home-record-number"><%= @wins %>–<%= @losses %></span>
+        <span class="home-record-label">Overall</span>
+      </div>
+      <div class="home-record-divider"></div>
+      <div class="home-record-block">
+        <span class="home-record-number"><%= @conf_wins %>–<%= @conf_losses %></span>
+        <span class="home-record-label">Big Ten</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @recent_games.any? %>
+<section class="home-section">
+  <h2 class="home-section-title">Recent Results</h2>
+  <div class="home-recent-games">
+    <% @recent_games.each do |game| %>
+      <%= link_to games_path(season: @season_year, anchor: "game-#{game.id}"),
+            class: "home-recent-game home-recent-game-#{game.result.downcase}",
+            data: { turbo: false } do %>
+        <span class="home-recent-result"><%= game.result %></span>
+        <span class="home-recent-meta">
+          <span class="home-recent-opponent"><%= game.home_away == "home" ? "vs" : "@" %> <%= game.opponent %></span>
+          <span class="home-recent-score"><%= game.nu_score %>–<%= game.opp_score %></span>
+        </span>
+        <span class="home-recent-date"><%= game.date.strftime("%b %-d") %></span>
+      <% end %>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
+<% leaders = [[@ppg_leader, "PPG", "Points"], [@rpg_leader, "RPG", "Rebounds"], [@apg_leader, "APG", "Assists"]].select { |l, _, _| l } %>
+<% if leaders.any? %>
+<section class="home-section">
+  <h2 class="home-section-title">Season Leaders</h2>
+  <div class="home-leaders">
+    <% leaders.each do |leader, abbr, label| %>
+      <%= link_to player_path(leader[:player], season: @season_year),
+            class: "home-leader-card",
+            data: { turbo: false } do %>
+        <div class="home-leader-value"><%= leader[:stat].send(abbr.downcase) %></div>
+        <div class="home-leader-abbr"><%= abbr %></div>
+        <div class="home-leader-label"><%= label %></div>
+        <div class="home-leader-name"><%= leader[:player].name %></div>
+        <div class="home-leader-games"><%= leader[:stat].games_played %> games</div>
+      <% end %>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
+<section class="home-section">
+  <h2 class="home-section-title">Explore</h2>
+  <div class="home-cards">
+    <%= link_to players_path, class: "home-card", data: { turbo: false } do %>
+      <div class="home-card-icon">👤</div>
+      <div class="home-card-title">Players</div>
+      <div class="home-card-desc"><%= @player_count %> players &middot; season totals, per-game splits, game logs</div>
+    <% end %>
+    <%= link_to games_path, class: "home-card", data: { turbo: false } do %>
+      <div class="home-card-icon">🏀</div>
+      <div class="home-card-title">Games</div>
+      <div class="home-card-desc">Box scores for every game, filterable by season</div>
+    <% end %>
+  </div>
+</section>

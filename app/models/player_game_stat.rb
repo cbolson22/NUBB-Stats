@@ -17,6 +17,13 @@ class PlayerGameStat < ApplicationRecord
     end
   }
   scope :with_minutes, -> { where("minutes > 0") }
+  scope :with_min_games, ->(n) { having("COUNT(*) >= ?", n) }
+
+  def self.leader_for(stats, players_by_id, col)
+    best = stats.max_by { |s| s.send(col).to_f }
+    return nil unless best
+    { stat: best, player: players_by_id[best.player_id] }
+  end
 
   def self.aggregated_stats
     select(

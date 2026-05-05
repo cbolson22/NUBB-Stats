@@ -356,3 +356,282 @@ nav a.active {
   background: #e0d0f0;
   border: none;
 }
+
+/* Home page */
+.home-hero {
+  background: linear-gradient(135deg, #3b1f64 0%, #4e2a84 60%, #6a3aac 100%);
+  margin: -24px -16px 0;
+  padding: 60px 24px 52px;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.home-hero-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.home-hero-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 10px;
+}
+
+.home-hero-title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: white;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.home-hero-season {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 28px;
+}
+
+.home-hero-records {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.home-record-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 32px;
+}
+
+.home-record-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.home-record-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.home-record-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+/* Sections */
+.home-section {
+  margin-top: 36px;
+}
+
+.home-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/* Recent results */
+.home-recent-games {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-recent-game {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: white;
+  border-radius: 7px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #222;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border-left: 4px solid #ccc;
+  transition: box-shadow 0.12s, transform 0.12s;
+}
+
+.home-recent-game:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  transform: translateX(2px);
+}
+
+.home-recent-game-w { border-left-color: #2d6e3e; }
+.home-recent-game-l { border-left-color: #b33a3a; }
+
+.home-recent-result {
+  font-size: 0.85rem;
+  font-weight: 800;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.home-recent-game-w .home-recent-result { color: #2d6e3e; }
+.home-recent-game-l .home-recent-result { color: #b33a3a; }
+
+.home-recent-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.home-recent-opponent {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-recent-score {
+  font-size: 0.85rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+.home-recent-date {
+  font-size: 0.78rem;
+  color: #aaa;
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Season leaders */
+.home-leaders {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.home-leader-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+  padding: 20px 16px 18px;
+  text-decoration: none;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: box-shadow 0.12s, border-color 0.12s, transform 0.12s;
+}
+
+.home-leader-card:hover {
+  box-shadow: 0 4px 14px rgba(78,42,132,0.15);
+  border-color: #4e2a84;
+  transform: translateY(-2px);
+}
+
+.home-leader-value {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #4e2a84;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.home-leader-abbr {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.home-leader-label {
+  display: none;
+}
+
+.home-leader-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 3px;
+}
+
+.home-leader-games {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Explore nav cards */
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.home-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+  padding: 24px 20px;
+  text-decoration: none;
+  color: #222;
+  display: block;
+  border: 2px solid transparent;
+  transition: box-shadow 0.12s, border-color 0.12s, transform 0.12s;
+}
+
+.home-card:hover {
+  box-shadow: 0 4px 16px rgba(78,42,132,0.15);
+  border-color: #4e2a84;
+  transform: translateY(-2px);
+}
+
+.home-card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.home-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4e2a84;
+  margin-bottom: 5px;
+}
+
+.home-card-desc {
+  font-size: 0.82rem;
+  color: #777;
+  line-height: 1.5;
+}

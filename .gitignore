@@ -39,6 +39,9 @@
 # VS Code
 /.vscode
 
+# macOS
+.DS_Store
+
 # Claude context (contains implementation details, not for version control)
 /CLAUDE.md
 

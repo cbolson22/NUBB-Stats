@@ -280,6 +280,7 @@ nav a.active {
 .game-card-body {
   display: none;
   padding: 16px;
+  overflow-x: auto;
 }
 .game-card-body.open {
   display: block;

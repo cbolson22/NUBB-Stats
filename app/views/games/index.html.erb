@@ -17,8 +17,8 @@
          onclick="this.nextElementSibling.classList.toggle('open')">
       <span class="game-title">
         <%= game.date.strftime("%b %-d") %>
-        <%= game.home_away == "home" ? "vs" : "@" %>
-        <%= game.opponent %><% if game.season_type == "postseason" %> (March Madness)<% elsif game.conference_game? %> (Big Ten)<% end %>
+        <%= game.home_away == "away" ? "@" : "vs" %>
+        <% if game.nu_seed? %>#<%= game.nu_seed %> NU vs #<%= game.opponent_seed %> <% end %><%= game.opponent %><% label = game.game_label; %><% if label.present? %> <%= label %><% end %>
       </span>
       <span>
         <% if game.result.present? %>

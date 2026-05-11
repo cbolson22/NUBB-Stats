@@ -8,28 +8,44 @@ class PlayersController < ApplicationController
     fgm_pg fga_pg fg3m_pg fg3a_pg ftm_pg fta_pg
   ].freeze
 
-  def index
-    season_year = params[:season].presence && params[:season] != "all" ? params[:season].to_i : nil
-    class_year  = params[:class_year].presence
-    per_game    = params[:mode] == "per_game"
+  VALID_GAME_TYPES = %w[conference nonconference big_ten_tournament march_madness].freeze
 
+  def index
+    per_game     = params[:mode] == "per_game"
     default_sort = per_game ? "ppg" : "total_pts"
     @sort_col    = SORTABLE_COLS.include?(params[:sort]) ? params[:sort] : default_sort
     @sort_dir    = params[:dir] == "asc" ? "asc" : "desc"
 
-    stats = PlayerGameStat.for_season(season_year)
-    stats = stats.for_class_year(class_year, season_year) if class_year
-    stats = stats.aggregated_stats.order(Arel.sql("#{@sort_col} #{@sort_dir} NULLS LAST"))
+    @selected_seasons     = Array(params[:seasons]).map(&:to_i).select { |y| y > 0 }
+    @selected_class_years = Array(params[:class_years]).reject(&:blank?)
+    @selected_game_types  = Array(params[:game_types]).select { |t| VALID_GAME_TYPES.include?(t) }
+    @start_date           = params[:start_date].presence
+    @end_date             = params[:end_date].presence
+
+    @stat_filters = PlayerGameStat::STAT_FILTER_EXPRS.keys.each_with_object({}) do |key, h|
+      min_val = params["#{key}_min"].presence
+      max_val = params["#{key}_max"].presence
+      h[key] = { min: min_val, max: max_val } if min_val || max_val
+    end
+
+    stats = PlayerGameStat
+              .for_season(@selected_seasons.presence)
+              .for_class_year(@selected_class_years)
+              .for_game_types(@selected_game_types)
+              .for_date_range(@start_date, @end_date)
+              .aggregated_stats(@stat_filters)
+              .order(Arel.sql("#{@sort_col} #{@sort_dir} NULLS LAST"))
 
     players_by_id = Player.where(id: stats.map(&:player_id)).index_by(&:id)
 
-    @season_year = season_year
     @seasons     = Season.order(year: :desc).pluck(:year)
     @class_years = PlayerSeason::CLASS_YEARS
-    @stats       = stats.map do |s|
+
+    display_season = @selected_seasons.one? ? @selected_seasons.first : nil
+    @stats = stats.map do |s|
       player = players_by_id[s.player_id]
       next unless player
-      { player: player, stats: s, class_year: player.class_year_for(season_year) }
+      { player: player, stats: s, class_year: player.class_year_for(display_season) }
     end.compact
   end
 

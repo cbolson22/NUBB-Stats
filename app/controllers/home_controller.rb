@@ -6,8 +6,10 @@ class HomeController < ApplicationController
     games = Game.joins(:season).where(seasons: { year: current_year })
     @wins         = games.where(result: "W").count
     @losses       = games.where(result: "L").count
-    @conf_wins    = games.where(result: "W", conference_game: true).count
-    @conf_losses  = games.where(result: "L", conference_game: true).count
+    conf_games    = games.where(conference_game: true, season_type: "regular")
+                        .where("games.notes IS NULL OR games.notes NOT LIKE ?", "Big Ten Tournament%")
+    @conf_wins    = conf_games.where(result: "W").count
+    @conf_losses  = conf_games.where(result: "L").count
     @recent_games = games.where.not(result: nil).order(date: :desc).limit(5).to_a
 
     raw_stats     = PlayerGameStat.for_season(current_year)
@@ -19,5 +21,12 @@ class HomeController < ApplicationController
     @rpg_leader   = PlayerGameStat.leader_for(raw_stats, players_by_id, "rpg")
     @apg_leader   = PlayerGameStat.leader_for(raw_stats, players_by_id, "apg")
     @player_count = Player.count
+
+    @tournament_runs = Game.joins(:season)
+                           .where(tournament: "NCAA")
+                           .order("seasons.year ASC, games.date ASC")
+                           .includes(:season)
+                           .group_by(&:season)
+                           .sort_by { |season, _| season.year }
   end
 end

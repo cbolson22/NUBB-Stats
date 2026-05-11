@@ -1,15 +1,104 @@
 <% per_game = params[:mode] == "per_game" %>
+<%
+  active_filter_count = @selected_seasons.size +
+                        @selected_class_years.size +
+                        @selected_game_types.size +
+                        (@start_date.present? || @end_date.present? ? 1 : 0) +
+                        @stat_filters.size
+%>
 
 <div class="page-header">
-  <h1>Player Stats<% if @season_year %> — <%= @season_year - 1 %>–<%= @season_year %><% else %> — All Seasons<% end %></h1>
+  <h1>Player Stats</h1>
 
-  <%= form_with url: players_path, method: :get, data: { turbo: false } do |f| %>
-    <div class="filters">
-      <%= f.select :season, [["All seasons", "all"]] + @seasons.map { |y| ["#{y-1}–#{y}", y] }, { selected: @season_year || "all" }, { onchange: "this.form.submit()" } %>
-      <%= f.select :class_year, [["All years", ""]] + @class_years.map { |cy| [cy.capitalize, cy] }, { selected: params[:class_year] }, { onchange: "this.form.submit()" } %>
+  <details class="filter-panel" <%= "open" if active_filter_count > 0 %>>
+    <summary class="filter-panel-toggle">
+      Filters<% if active_filter_count > 0 %> <span class="filter-badge"><%= active_filter_count %></span><% end %>
+    </summary>
+
+    <%= form_with url: players_path, method: :get, data: { turbo: false } do |f| %>
       <%= f.hidden_field :mode, value: params[:mode] %>
-    </div>
-  <% end %>
+      <%= f.hidden_field :sort, value: @sort_col %>
+      <%= f.hidden_field :dir, value: @sort_dir %>
+
+      <div class="filter-sections">
+        <div class="filter-section">
+          <div class="filter-section-title">Season</div>
+          <div class="filter-checkboxes">
+            <% @seasons.each do |y| %>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" name="seasons[]" value="<%= y %>"
+                       <%= "checked" if @selected_seasons.include?(y) %>>
+                <%= y - 1 %>–<%= y %>
+              </label>
+            <% end %>
+          </div>
+          <div class="filter-hint">Leave blank for all seasons</div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Class Year</div>
+          <div class="filter-checkboxes">
+            <% @class_years.each do |cy| %>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" name="class_years[]" value="<%= cy %>"
+                       <%= "checked" if @selected_class_years.include?(cy) %>>
+                <%= cy.capitalize %>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Game Type</div>
+          <div class="filter-checkboxes">
+            <% [["Conference", "conference"], ["Non-Conference", "nonconference"], ["Big Ten Tournament", "big_ten_tournament"], ["March Madness", "march_madness"]].each do |label, val| %>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" name="game_types[]" value="<%= val %>"
+                       <%= "checked" if @selected_game_types.include?(val) %>>
+                <%= label %>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Date Range</div>
+          <div class="filter-date-range">
+            <label class="filter-date-label">
+              From
+              <input type="date" name="start_date" value="<%= @start_date %>" class="filter-date-input">
+            </label>
+            <label class="filter-date-label">
+              To
+              <input type="date" name="end_date" value="<%= @end_date %>" class="filter-date-input">
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section filter-section-wide">
+          <div class="filter-section-title">Stat Filters <span class="filter-hint-inline">(min / max per player, based on aggregated stats)</span></div>
+          <div class="stat-filter-grid">
+            <% { "G" => "games_played", "PPG" => "ppg", "RPG" => "rpg", "APG" => "apg", "SPG" => "spg", "BPG" => "bpg", "TOPG" => "topg", "FG%" => "fg_pct", "3P%" => "fg3_pct", "FT%" => "ft_pct" }.each do |label, key| %>
+              <div class="stat-filter-row">
+                <span class="stat-filter-label"><%= label %></span>
+                <input type="number" step="0.1" min="0" name="<%= key %>_min"
+                       value="<%= @stat_filters.dig(key, :min) %>"
+                       placeholder="Min" class="stat-filter-input">
+                <input type="number" step="0.1" min="0" name="<%= key %>_max"
+                       value="<%= @stat_filters.dig(key, :max) %>"
+                       placeholder="Max" class="stat-filter-input">
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <%= f.submit "Apply Filters", class: "btn-apply" %>
+        <%= link_to "Reset", players_path(mode: params[:mode]), class: "btn-reset", data: { turbo: false } %>
+      </div>
+    <% end %>
+  </details>
 
   <div class="toggle-group">
     <%= link_to "Totals", players_path(request.query_parameters.merge(mode: "totals")), class: "toggle-btn #{per_game ? '' : 'active'}", data: { turbo: false } %>
@@ -22,7 +111,7 @@
   <thead>
     <tr>
       <th>Player</th>
-      <th><%= @season_year.present? || params[:class_year].present? ? "Year" : "" %></th>
+      <th><%= @selected_seasons.one? || @selected_class_years.any? ? "Year" : "" %></th>
       <th><%= sort_link("G", "games_played", @sort_col, @sort_dir, base) %></th>
       <% if per_game %>
         <th><%= sort_link("PPG", "ppg", @sort_col, @sort_dir, base) %></th>
@@ -63,8 +152,8 @@
     <% @stats.each do |s| %>
       <% stat = s[:stats]; player = s[:player] %>
       <tr>
-        <td><%= link_to player.name, player_path(player, season: @season_year || "all"), class: "player-link" %></td>
-        <td><%= (params[:class_year].presence || s[:class_year])&.capitalize %></td>
+        <td><%= link_to player.name, player_path(player, season: @selected_seasons.one? ? @selected_seasons.first : "all"), class: "player-link" %></td>
+        <td><%= s[:class_year]&.capitalize %></td>
         <td><%= stat.games_played.to_i %></td>
         <% if per_game %>
           <td><%= stat.ppg %></td>

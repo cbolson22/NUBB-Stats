@@ -104,6 +104,9 @@ class StatsImporter
       season_type: game_entry["seasonType"],
       conference_game: game_entry["conferenceGame"],
       tournament: game_entry["tournament"],
+      notes: game_entry["notes"],
+      nu_seed: game_entry["teamSeed"],
+      opponent_seed: game_entry["opponentSeed"],
       attendance: game_info["attendance"],
       venue: game_info["venue"]
     )

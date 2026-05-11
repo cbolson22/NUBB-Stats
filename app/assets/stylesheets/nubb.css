@@ -358,6 +358,210 @@ nav a.active {
   border: none;
 }
 
+/* Advanced filter panel */
+.filter-panel {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.filter-panel-toggle {
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4e2a84;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.filter-panel-toggle::-webkit-details-marker { display: none; }
+
+.filter-panel-toggle::before {
+  content: "▶";
+  font-size: 0.65rem;
+  transition: transform 0.15s;
+  display: inline-block;
+}
+
+.filter-panel[open] .filter-panel-toggle::before {
+  transform: rotate(90deg);
+}
+
+.filter-badge {
+  background: #4e2a84;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.filter-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid #eee;
+}
+
+.filter-section {
+  padding: 14px 16px;
+  border-right: 1px solid #eee;
+  min-width: 140px;
+}
+
+.filter-section:last-child {
+  border-right: none;
+}
+
+.filter-section-wide {
+  flex: 1 1 100%;
+  border-top: 1px solid #eee;
+  border-right: none;
+}
+
+.filter-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.filter-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.filter-checkbox-label input[type="checkbox"] {
+  accent-color: #4e2a84;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.filter-hint {
+  font-size: 0.75rem;
+  color: #bbb;
+  margin-top: 8px;
+}
+
+.filter-hint-inline {
+  font-size: 0.72rem;
+  color: #bbb;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.filter-date-range {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-date-label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.filter-date-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  color: #333;
+  width: 150px;
+}
+
+.stat-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px 24px;
+}
+
+.stat-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-filter-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.stat-filter-input {
+  width: 64px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 0.82rem;
+  color: #333;
+  text-align: center;
+}
+
+.stat-filter-input::placeholder {
+  color: #bbb;
+  font-size: 0.75rem;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+.btn-apply {
+  background: #4e2a84;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-apply:hover {
+  background: #3b1f64;
+}
+
+.btn-reset {
+  font-size: 0.85rem;
+  color: #888;
+  text-decoration: none;
+}
+
+.btn-reset:hover {
+  color: #4e2a84;
+}
+
 /* Home page */
 .home-hero {
   background: linear-gradient(135deg, #3b1f64 0%, #4e2a84 60%, #6a3aac 100%);
@@ -592,6 +796,85 @@ nav a.active {
 .home-leader-games {
   font-size: 0.75rem;
   color: #aaa;
+}
+
+/* March Madness history */
+.tournament-runs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tournament-run {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+  overflow: hidden;
+}
+
+.tournament-run-header {
+  background: #4e2a84;
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tournament-season {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tournament-seed {
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.tournament-record {
+  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tournament-game {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  text-decoration: none;
+  color: #222;
+  transition: background 0.1s;
+}
+
+.tournament-game:last-child {
+  border-bottom: none;
+}
+
+.tournament-game:hover {
+  background: #f0eaf8;
+}
+
+.tournament-round {
+  font-size: 0.8rem;
+  color: #888;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.tournament-matchup {
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.tournament-score {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 /* Explore nav cards */

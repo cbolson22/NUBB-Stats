@@ -9,7 +9,10 @@ class GamesController < ApplicationController
                        .includes(player_game_stats: :player)
     @wins        = @games.where(result: "W").count
     @losses      = @games.where(result: "L").count
-    @conf_wins   = @games.where(result: "W", conference_game: true).count
-    @conf_losses = @games.where(result: "L", conference_game: true).count
+
+    conf_games   = @games.where(conference_game: true, season_type: "regular")
+                         .where("games.notes IS NULL OR games.notes NOT LIKE ?", "Big Ten Tournament%")
+    @conf_wins   = conf_games.where(result: "W").count
+    @conf_losses = conf_games.where(result: "L").count
   end
 end

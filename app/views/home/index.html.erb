@@ -57,6 +57,36 @@
 </section>
 <% end %>
 
+<% if @tournament_runs.any? %>
+<section class="home-section">
+  <h2 class="home-section-title">March Madness History</h2>
+  <div class="tournament-runs">
+    <% @tournament_runs.each do |season, games| %>
+      <div class="tournament-run">
+        <div class="tournament-run-header">
+          <span class="tournament-season"><%= season.year - 1 %>–<%= season.year %></span>
+          <% if games.first.nu_seed? %>
+            <span class="tournament-seed">#<%= games.first.nu_seed %> Seed</span>
+          <% end %>
+          <span class="tournament-record">
+            <%= games.count { |g| g.result == "W" } %>–<%= games.count { |g| g.result == "L" } %>
+          </span>
+        </div>
+        <% games.each do |game| %>
+          <%= link_to games_path(season: season.year, anchor: "game-#{game.id}"),
+                class: "tournament-game",
+                data: { turbo: false } do %>
+            <span class="tournament-round"><%= game.notes ? game.notes.split(" - ").last : "NCAA Tournament" %></span>
+            <span class="tournament-matchup">vs <% if game.opponent_seed? %>#<%= game.opponent_seed %> <% end %><%= game.opponent %></span>
+            <span class="tournament-score <%= game.result == 'W' ? 'result-w' : 'result-l' %>"><%= game.result %> <%= game.nu_score %>–<%= game.opp_score %></span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
 <section class="home-section">
   <h2 class="home-section-title">Explore</h2>
   <div class="home-cards">

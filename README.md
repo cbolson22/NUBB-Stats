@@ -5,9 +5,30 @@ Northwestern University basketball stats site tracking all players since the 202
 ## Stack
 
 - **Ruby on Rails 8.1.3** — server-rendered HTML, no JS framework
-- **PostgreSQL** — hosted on Heroku Postgres (essential-0)
-- **Heroku** — app name `nubb-stats`, auto-deploy from GitHub main branch
-- **Heroku Scheduler** — runs `rake import:stats` nightly at 2am UTC
+- **PostgreSQL** — local only (Heroku removed)
+
+---
+
+## Updating Stats Locally
+
+After any NU game, run this to pull in new data, then start the server to see it:
+
+```bash
+rails import:stats
+rails server
+```
+
+Safe to run as many times as you want — all upserts, no duplicates. Auto-detects the current season by date.
+
+**Before the first import of a new season**, make sure `db/seeds.rb` is up to date with all players on the roster (including new players) and their class years for that season, then re-run:
+
+```bash
+rails db:seed
+```
+
+The importer won't associate stats correctly with players who aren't in the seed data. When the new roster is announced each fall, update seeds first, then import.
+
+---
 
 ## Data Source
 
@@ -26,6 +47,7 @@ rails server
 The stats importer uses fixture files locally to avoid hitting the API rate limit. Fixture JSON files are in `test/fixtures/files/`.
 
 To run the importer locally against fixtures:
+
 ```ruby
 StatsImporter.import(season: 2026, use_fixture: true)
 ```
